@@ -1,0 +1,22 @@
+body{
+    background-image: url("backround2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+} */
+.h1-heder{
+    text-align: center;
+    color: wheat;
+}
+ .card{
+    font-size: 30px;
+    /* /* color: white; */
+    border: black solid; 
+    border-radius: 20%;
+    height: 50px;
+    width: 50px;
+    text-align: center;  
+ }
+ #board{
+     width: 61%;
+     border:black solid;
+ }
