@@ -1,22 +1,31 @@
 body{
-    background-image: url("backround2.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-} */
+    background-color:  white;
+    
+} 
 .h1-heder{
     text-align: center;
-    color: wheat;
+    
 }
- .card{
-    font-size: 30px;
-    /* /* color: white; */
-    border: black solid; 
-    border-radius: 20%;
-    height: 50px;
-    width: 50px;
-    text-align: center;  
- }
+
  #board{
-     width: 61%;
-     border:black solid;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
  }
+
+ .Pokecard {
+    border: 2px solid mediumseagreen;
+    width: 250px;
+    padding: 10px;
+    margin: 1rem;
+    box-shadow: 7px 10px 12px -5px rgba(0, 0, 0.56);
+    text-align: center;
+    background-color: white;
+    border-radius: 3px;
+  }
+  .Pokecard-data {
+    font-size: 80%;
+  }
+
+
+  
+
