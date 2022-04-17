@@ -1,20 +1,18 @@
 body{
-    background-color:  white;
-    
-} 
-.h1-heder{
-    text-align: center;
-    
+  background-color:#eceff1 ;
 }
-
+.container-fluid{
+  background-color:#eceff1 ;
+}
  #board{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
  }
 
  .Pokecard {
     border: 2px solid mediumseagreen;
-    width: 250px;
+    width: 160px;
+    height: 250px;
     padding: 10px;
     margin: 1rem;
     box-shadow: 7px 10px 12px -5px rgba(0, 0, 0.56);
@@ -22,9 +20,20 @@ body{
     background-color: white;
     border-radius: 3px;
   }
-  .Pokecard-data {
-    font-size: 80%;
-  }
+.back{
+  width: 100%;
+  height: 100%;
+}
+.Pokecard  {
+  transform: rotateY(180deg);
+}
+.Pokecard:active {
+  transform: scale(0.97);
+  transition: transform .2s;
+}
+.Pokecard.flip {
+  transform: rotateY(180deg);
+}
 
 
   
