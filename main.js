@@ -27,28 +27,56 @@ function shuffle(array) {
 	}
 	return array;
 }
+function chack(id1, id2) {
+	if (id1 !== id2) {
+		console.log(secend);
+		let a = document.getElementById(id1);
+		a.className = "face";
+		a.src = "Pokemon-card-back.webp";
+
+		let b = document.getElementById(id2);
+		b.className = "face";
+		b.src = "Pokemon-card-back.webp";
+
+		console.log(a);
+		console.log(b);
+		first = "";
+		secend = "";
+	}
+}
 function creatCards(arr) {
-	for (let card of arr) {
-		const div = document.createElement("div");
+	for (let pok of arr) {
+		const card = document.createElement("div");
+
 		const fimg = document.createElement("img");
-		const bimg = document.createElement("img");
-		div.className = "Pokecard";
-		div.style.cursor = "pointer";
-		console.log(card.id);
-		div.id = card.id;
-		div.onclick = "flip";
-		// bimg.src = imgSrc;
-		bimg.className = "back";
-		console.log(card.img);
-		fimg.src = card.img;
-		fimg.className = "back";
 
-		div.appendChild(fimg);
+		card.className = "Pokecard";
+		card.style.cursor = "pointer";
 
-		board.appendChild(div);
+		fimg.className = "face";
+		fimg.src = "Pokemon-card-back.webp";
+		fimg.id = pok.id;
+		card.appendChild(fimg);
+		board.appendChild(card);
+		card.addEventListener("click", (e) => {
+			if (fimg.className === "face") {
+				fimg.classList = "back";
+				fimg.src = pok.img;
+				if (first === "") {
+					first = e.target.id;
+				} else {
+					secend = e.target.id;
+					setTimeout(function () {
+						chack(first, secend);
+					}, 2000);
+				}
+			}
+		});
 	}
 }
 getCard(size);
 const pokemon = [...arr, ...arr];
+let first = "";
+let secend = "";
 shuffle(pokemon);
 creatCards(pokemon);

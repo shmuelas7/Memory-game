@@ -19,21 +19,36 @@ body{
     text-align: center;
     background-color: white;
     border-radius: 3px;
+    
+    
+  }
+.face{
+    width: 100%;
+    height: 100%;
+    /* background-image: url("Pokemon-card-back.webp"); */
+    background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; 
+    
+    
   }
 .back{
   width: 100%;
   height: 100%;
 }
-.Pokecard  {
+/* .Pokecard  {
   transform: rotateY(180deg);
-}
+} */
 .Pokecard:active {
   transform: scale(0.97);
   transition: transform .2s;
 }
-.Pokecard.flip {
+
+.back {
   transform: rotateY(180deg);
+  
 }
+
 
 
   
