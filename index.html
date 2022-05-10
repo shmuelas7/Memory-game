@@ -12,12 +12,17 @@
 			integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 			crossorigin="anonymous"
 		/>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.9/dist/sweetalert2.all.min.js"></script>
 	</head>
 	<body>
-		<div class="container-fluid row">
+		<div id="sw-time">00:00:00</div>
+		<div>
 			<h1 class="text-center">Pokimon Memory game</h1>
-			<div class="col-2"></div>
-			<div id="board" class="col-8"></div>
+			<div id="players"></div>
+			<div class="row">
+				<div class="col-2"></div>
+				<div id="board" class="col-8"></div>
+			</div>
 		</div>
 
 		<script src="main.js"></script>
