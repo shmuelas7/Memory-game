@@ -50,44 +50,22 @@ function shuffle(array) {
 	}
 	return array;
 }
-function getImg(id) {
-	let a = document.getElementsByTagName("img");
-	let arr = [...a];
-	let res = arr.find((v) => v.id == id);
-	return res;
-}
-function chack(id1, id2) {
-	if (id1 === id2) {
+function chack(pok1, pok2) {
+	if (pok1.img.src === pok2.img.src) {
 		count++;
-		first = "";
-		secend = "";
+		pok1.img = null;
+		pok2.img = null;
 		console("match");
 		return;
 	}
-	console.log(first);
-	console.log(secend);
 
-	let a = getImg(first);
-	console.log(a);
-	a.className = "face";
-	a.src = "Pokemon-card-back.webp";
-	console.log("replace a", a);
-
-	let b = getImg(secend);
-	b.className = "face";
-	b.src = "Pokemon-card-back.webp";
-	console.log("replace b", b);
-	first = "";
-	secend = "";
-	console.log(`first:${first}  secen ${secend}`);
+	pok1.img.className = "face";
+	pok2.img.className = "face";
+	pok1.card.className = "Pokecard img-back";
+	pok2.card.className = "Pokecard img-back";
+	pok1.img = null;
+	pok2.img = null;
 	return;
-}
-function returnImg(id) {
-	for (x of arr) {
-		if (id == x.id) {
-			return x.img;
-		}
-	}
 }
 function creatCards() {
 	for (let pok of pokemon) {
@@ -95,30 +73,34 @@ function creatCards() {
 
 		const fimg = document.createElement("img");
 
-		card.className = "Pokecard";
+		card.className = "Pokecard img-back";
 		card.style.cursor = "pointer";
-		card.id = pok.id;
+		card.style.backgroundImage = "Pokemon-card-back.webp";
 
 		fimg.className = "face";
-		fimg.src = "Pokemon-card-back.webp";
-		fimg.id = pok.id;
+		fimg.src = pok.img;
+
 		card.appendChild(fimg);
 		board.appendChild(card);
 		card.onclick = function () {
-			console.log(this);
-			if (fimg.className === "face" && (first === "" || secend === "")) {
+			if (
+				fimg.className === "face" &&
+				(first.img === null || secend.img == null)
+			) {
+				console.log(card);
+				card.className = "pokecard";
 				fimg.classList = "back";
-
-				fimg.src = returnImg(this.id);
-				if (first === "") {
-					first = this.id;
+				if (first.img === null) {
+					first.img = fimg;
+					first.card = this;
 					console.log("first " + first);
 				} else {
-					secend = this.id;
+					secend.img = fimg;
+					secend.card = this;
 					console.log("secend " + secend);
 					setTimeout(function () {
 						chack(first, secend);
-					}, 500);
+					}, 1000);
 				}
 			}
 		};
@@ -170,8 +152,8 @@ let players = JSalert();
 console.log(players);
 let count = 0;
 const pokemon = [...arr, ...arr];
-let first = "";
-let secend = "";
+let first = { img: null, card: null };
+let secend = { img: null, card: null };
 shuffle(pokemon);
 creatCards();
 console.log(pokemon);
