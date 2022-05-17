@@ -19,6 +19,7 @@ body{
     text-align: center;
     background-color: white;
     border-radius: 3px;
+    border-radius: 20px;
 
     
     
@@ -44,6 +45,7 @@ body{
 .back{
   width: 160px;
   height: 250px;
+  margin-top: 20px;
   display: block;
 }
 
@@ -58,6 +60,17 @@ body{
 text-align: center;
 display: inline;
 margin-left:30%;
+}
+.bg{
+  background-color: green;
+  
+}
+
+.player{
+  border-radius: 20px;
+}
+label {
+  font-size: 24px;
 }
 
 
