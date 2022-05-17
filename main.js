@@ -60,9 +60,20 @@ function your_turn() {
 		? "col-6 player"
 		: "col-6 text-light bg-dark player";
 }
+function winerAlert(name) {
+	Swal.fire({
+		title: "the winer is " + name + "!!",
+		imageUrl: "winner.jpg",
+		imageWidth: 400,
+		imageHeight: 200,
+		imageAlt: "Custom image",
+	});
+}
 function winer(player1, player2) {
 	if (player1.count + player2.count == amount_of_cards) {
-		alert("win");
+		player1.count > player2.count
+			? winerAlert(player1.name)
+			: winerAlert(player2.name);
 	}
 }
 function chack(pok1, pok2) {
@@ -75,15 +86,16 @@ function chack(pok1, pok2) {
 			if (turn) {
 				pok1.count++;
 				c1.innerText = pok1.count;
-				winer(pok1, pok2);
 			} else {
 				pok2.count++;
 				c2.innerText = pok2.count;
-				winer(pok1, pok2);
 			}
 		}
 		pok1.img = null;
 		pok2.img = null;
+		if (winer(pok1, pok2)) {
+			alert(turn ? pok1.name : pok2.name);
+		}
 		return;
 	}
 	if (players) {
@@ -124,11 +136,9 @@ function creatCards(pokemon) {
 				if (first.img === null) {
 					first.img = fimg;
 					first.card = this;
-					console.log("first " + first);
 				} else {
 					secend.img = fimg;
 					secend.card = this;
-					console.log("secend " + secend);
 					setTimeout(function () {
 						chack(first, secend);
 					}, 1000);
@@ -159,9 +169,9 @@ function startGame() {
 					'<input id="swal-input2" placeholder="secend name"  class="swal2-input">',
 				focusConfirm: false,
 				preConfirm: () => {
-					let a = document.getElementById("swal-input1").value;
-					let b = document.getElementById("swal-input2").value;
-					createPlayres(a, b);
+					first.name = document.getElementById("swal-input1").value;
+					secend.name = document.getElementById("swal-input2").value;
+					createPlayres(first, secend);
 					players = true;
 					return;
 				},
@@ -190,7 +200,7 @@ function createPlayres(a, b) {
 	name1 = document.createElement("h3");
 	name2 = document.createElement("h3");
 
-	name1.innerHTML = a + ": ";
+	name1.innerHTML = a.name + ": ";
 	label1.innerHTML = 0;
 	label1.id = "count1";
 	name1.className = "name-one";
@@ -200,7 +210,7 @@ function createPlayres(a, b) {
 
 	label2.innerHTML = 0;
 	label2.id = "count2";
-	name2.innerHTML = b + ": ";
+	name2.innerHTML = b.name + ": ";
 	name2.className = "name-one";
 	player2.id = "player2";
 	player2.className = "col-6";
@@ -216,6 +226,6 @@ let amount_of_cards = 4;
 
 let players = null;
 let turn = true;
-let first = { img: null, card: null, count: 0 };
-let secend = { img: null, card: null, count: 0 };
+let first = { img: null, card: null, count: 0, name: null };
+let secend = { img: null, card: null, count: 0, name: null };
 startGame();
