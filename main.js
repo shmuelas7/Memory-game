@@ -32,8 +32,6 @@ const arr = [
 	{ id: 30, img: "./pokemon/p30.png" },
 ];
 
-const board = document.getElementById("board");
-
 function shuffle(array) {
 	let currentIndex = array.length,
 		randomIndex;
@@ -51,15 +49,6 @@ function shuffle(array) {
 	return array;
 }
 
-function your_turn() {
-	let player1 = document.getElementById("player1");
-	let player2 = document.getElementById("player2");
-
-	player2.className = turn ? "col-6 player" : "col-6 text-light bg-dark player";
-	player1.className = !turn
-		? "col-6 player"
-		: "col-6 text-light bg-dark player";
-}
 function winerAlert(name) {
 	Swal.fire({
 		title: "the winer is " + name + "!!",
@@ -69,46 +58,46 @@ function winerAlert(name) {
 		imageAlt: "Custom image",
 	});
 }
-function winer(player1, player2) {
-	if (player1.count + player2.count == amount_of_cards) {
-		player1.count > player2.count
-			? winerAlert(player1.name)
-			: winerAlert(player2.name);
+function winer(player) {
+	let score = 0;
+	for (x of arrPlayers) {
+		score += x.count;
 	}
+	score == amount_of_cards ? winerAlert(player.name) : null;
 }
-function chack(pok1, pok2) {
-	let c1 = document.getElementById("count1");
-	let c2 = document.getElementById("count2");
+function chack(player) {
+	if (player.img1.src === player.img2.src) {
+		var audio = new Audio("./Applause.mp3");
+		audio.play();
+		player.count++;
 
-	if (pok1.img.src === pok2.img.src) {
-		console.log("pp" + players);
-		if (players) {
-			if (turn) {
-				pok1.count++;
-				c1.innerText = pok1.count;
-			} else {
-				pok2.count++;
-				c2.innerText = pok2.count;
-			}
-		}
-		pok1.img = null;
-		pok2.img = null;
-		if (winer(pok1, pok2)) {
-			alert(turn ? pok1.name : pok2.name);
-		}
+		player.img1 = null;
+		player.img2 = null;
+		updateCount(player);
+		winer(player);
+
 		return;
 	}
-	if (players) {
-		turn = turn ? false : true;
-		your_turn();
-	}
-	pok1.img.className = "face";
-	pok2.img.className = "face";
-	pok1.card.className = "Pokecard img-back ";
-	pok2.card.className = "Pokecard img-back";
-	pok1.img = null;
-	pok2.img = null;
+	player.img1.className = "face";
+	player.img2.className = "face";
+	player.card1.className = "Pokecard img-back ";
+	player.card2.className = "Pokecard img-back";
+	player.img1 = null;
+	player.img2 = null;
+
+	updateTurn(player);
+
 	return;
+}
+function updateTurn(player) {
+	chackTurn++;
+	chackTurn = chackTurn == numberOfPlayrs ? 0 : chackTurn;
+	player.divName.className = "col-2 text-center player";
+	arrPlayers[chackTurn].divName.className =
+		"col-2 text-center text-light bg-dark player";
+}
+function updateCount(player) {
+	player.labelCount.innerHTML = player.count;
 }
 function creatCards(pokemon) {
 	for (let pok of pokemon) {
@@ -126,63 +115,84 @@ function creatCards(pokemon) {
 		card.appendChild(fimg);
 		board.appendChild(card);
 		card.onclick = function () {
+			console.log(chackTurn, numberOfPlayrs);
+			let player = arrPlayers[chackTurn];
+
 			if (
 				fimg.className === "face" &&
-				(first.img === null || secend.img == null)
+				(player.img1 === null || player.img2 == null)
 			) {
-				console.log(card);
 				card.className = "pokecard";
 				fimg.classList = "back";
-				if (first.img === null) {
-					first.img = fimg;
-					first.card = this;
+				if (player.img1 === null) {
+					player.img1 = fimg;
+					player.card1 = this;
 				} else {
-					secend.img = fimg;
-					secend.card = this;
+					player.img2 = fimg;
+					player.card2 = this;
 					setTimeout(function () {
-						chack(first, secend);
+						chack(player);
 					}, 1000);
 				}
 			}
 		};
 	}
 }
-function startGame() {
-	Swal.fire({
+function getValueSelect() {
+	let select = document.getElementById("numberOfPlayres");
+	numberOfPlayrs = select.options[select.selectedIndex].value;
+}
+function createInputPlayrs() {
+	let input = "";
+	for (i = 1; i <= numberOfPlayrs; i++) {
+		input += `<input id="name${i}"placeholder="name ${i} " class="swal2-input">`;
+	}
+	return input;
+}
+function pushPlayrsToArray() {
+	for (i = 1; i <= numberOfPlayrs; i++) {
+		let playerName = document.getElementById("name" + i).value;
+		let player = new CreatePlayre(playerName);
+		arrPlayers.push(player);
+	}
+}
+async function startGame() {
+	await Swal.fire({
 		title: "Welcom To My Pokemon Memory Game",
-
-		showCancelButton: true,
-		cancelButtonText: `play alone`,
 		confirmButtonColor: "#3085d6",
-		cancelButtonColor: "#3085d6",
-		confirmButtonText: "play with frind",
+		confirmButtonText: "Continue to the game",
 		html:
 			'<h6 for="range">Select the amount of cards</h6>' +
 			'<input type="range" id="range" onchange="update_cards()" value="10"  min="2" max="60"  >' +
-			'<label id="Crange"></label>',
+			'<label id="Crange"></label>' +
+			"</br>" +
+			`<select name="players" id="numberOfPlayres" onchange="getValueSelect()">
+				<option value="1">--Number of players--</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+			</select>`,
 	}).then((result) => {
-		if (result.isConfirmed) {
-			Swal.fire({
-				title: "enter names",
-				html:
-					'<input id="swal-input1" placeholder="first name" class="swal2-input">' +
-					'<input id="swal-input2" placeholder="secend name"  class="swal2-input">',
-				focusConfirm: false,
-				preConfirm: () => {
-					first.name = document.getElementById("swal-input1").value;
-					secend.name = document.getElementById("swal-input2").value;
-					createPlayres(first, secend);
-					players = true;
-					return;
-				},
-			});
-		}
-		let arr1 = create_array_buy_num();
+		getValueSelect();
+		let input = createInputPlayrs();
+
+		Swal.fire({
+			title: "Enter Names",
+			html: input,
+			confirmButtonText: "Start Game",
+			preConfirm: () => {
+				pushPlayrsToArray();
+				createHeaderForEechPlayer();
+			},
+		});
+		let arr1 = createNumberOfCurds();
 		const pokemon = [...arr1, ...arr1];
 		shuffle(pokemon);
 		creatCards(pokemon);
 	});
 }
+
 function update_cards() {
 	let range = document.getElementById("range");
 	let count = document.getElementById("Crange");
@@ -190,42 +200,42 @@ function update_cards() {
 		range.value % 2 ? Number(range.value) + 1 : Number(range.value);
 	count.innerHTML = amount_of_cards;
 }
-function createPlayres(a, b) {
+function createHeaderForEechPlayer() {
 	let players = document.getElementById("players");
-	let player1 = document.createElement("div");
-	let player2 = document.createElement("div");
-	let label1 = document.createElement("label");
-	let label2 = document.createElement("label");
-
-	name1 = document.createElement("h3");
-	name2 = document.createElement("h3");
-
-	name1.innerHTML = a.name + ": ";
-	label1.innerHTML = 0;
-	label1.id = "count1";
-	name1.className = "name-one";
-	player1.id = "player1";
-	player1.className = "col-6 text-light bg-dark player";
-	player1.append(name1, label1);
-
-	label2.innerHTML = 0;
-	label2.id = "count2";
-	name2.innerHTML = b.name + ": ";
-	name2.className = "name-one";
-	player2.id = "player2";
-	player2.className = "col-6";
-	player2.append(name2, label2);
-
-	players.append(player1, player2);
+	arrPlayers.forEach((v, i) => {
+		let div = document.createElement("div");
+		let label = document.createElement("label");
+		let h3 = document.createElement("h5");
+		h3.innerText = v.name + ": ";
+		v.labelCount = label;
+		v.divName = div;
+		label.innerText = v.count;
+		div.id = i + v.name;
+		div.className =
+			i == 0
+				? `col-2 text-center text-light bg-dark player`
+				: `col-2 text-center player`;
+		div.append(h3, label);
+		players.append(div);
+	});
 }
-function create_array_buy_num() {
+function createNumberOfCurds() {
 	return arr.slice(0, amount_of_cards);
 }
+function CreatePlayre(name, count = 0) {
+	this.name = name;
+	this.card1 = null;
+	this.card2 = null;
+	this.count = count;
+	this.img1 = null;
+	this.img2 = null;
+	this.idCount = null;
+	this.divName = null;
+}
 
+const board = document.getElementById("board");
+let arrPlayers = [];
+let numberOfPlayrs = 1;
 let amount_of_cards = 4;
-
-let players = null;
-let turn = true;
-let first = { img: null, card: null, count: 0, name: null };
-let secend = { img: null, card: null, count: 0, name: null };
+let chackTurn = 0;
 startGame();
