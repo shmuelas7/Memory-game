@@ -52,29 +52,35 @@ function shuffle(array) {
 function winerAlert(name) {
 	Swal.fire({
 		title: "the winer is " + name + "!!",
-		imageUrl: "winner.jpg",
+		imageUrl: "./files/winner.jpg",
 		imageWidth: 400,
 		imageHeight: 200,
 		imageAlt: "Custom image",
 	});
 }
-function winer(player) {
+function winer() {
 	let score = 0;
+	let max = 0;
+	let player = null;
 	for (x of arrPlayers) {
+		if (max < x.count) {
+			max = x.count;
+			player = x;
+		}
 		score += x.count;
 	}
 	score == amount_of_cards ? winerAlert(player.name) : null;
 }
 function chack(player) {
 	if (player.img1.src === player.img2.src) {
-		var audio = new Audio("./Applause.mp3");
+		var audio = new Audio("./files/Applause.mp3");
 		audio.play();
 		player.count++;
 
 		player.img1 = null;
 		player.img2 = null;
 		updateCount(player);
-		winer(player);
+		winer();
 
 		return;
 	}
@@ -107,7 +113,7 @@ function creatCards(pokemon) {
 
 		card.className = "Pokecard img-back";
 		card.style.cursor = "pointer";
-		card.style.backgroundImage = "Pokemon-card-back.webp";
+		card.style.backgroundImage = "./Pokemon-card-back.webp";
 
 		fimg.className = "face";
 		fimg.src = pok.img;
@@ -164,7 +170,7 @@ async function startGame() {
 		html:
 			'<h6 for="range">Select the amount of cards</h6>' +
 			'<input type="range" id="range" onchange="update_cards()" value="10"  min="2" max="60"  >' +
-			'<label id="Crange"></label>' +
+			'<label id="Crange">8</label>' +
 			"</br>" +
 			`<select name="players" id="numberOfPlayres" onchange="getValueSelect()">
 				<option value="1">--Number of players--</option>
